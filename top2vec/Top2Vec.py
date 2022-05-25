@@ -1,3 +1,6 @@
+print("Ni Hao")
+from pathlib import Path
+print('Running' if __name__ == '__main__' else 'Importing', Path(__file__).resolve())
 # Author: Dimo Angelov
 #
 # License: BSD 3 clause
@@ -1844,6 +1847,16 @@ class Top2Vec:
                                                           document_vectors=self.document_vectors,
                                                           dist=False)
                 topic_sizes = pd.Series(doc_top).value_counts()
+
+
+                ## find missing topics
+                missing_topics = list(set(range(0, len(topic_sizes))) - set(topic_sizes.index.to_list()))
+
+                ## if there are any, add them with a size of 0 documents
+                if missing_topics:
+	                zeros = pd.Series(index=missing_topics, data=[0] * len(missing_topics))
+	                topic_sizes = pd.concat([topic_sizes, zeros])
+
                 top_sizes = [topic_sizes[i] for i in range(0, len(topic_sizes))]
 
             else:
